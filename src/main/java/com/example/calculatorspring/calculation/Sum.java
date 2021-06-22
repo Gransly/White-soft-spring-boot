@@ -4,8 +4,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Sum implements Calculation{
-
-
     @Override
     public Object CalculateValue(int[] array) {
         int summarize = 0;
@@ -15,8 +13,4 @@ public class Sum implements Calculation{
         return  summarize;
     }
 
-    @Override
-    public String GetDefinition(Object digit) {
-        return String.format("Sum: %d", digit);
-    }
 }

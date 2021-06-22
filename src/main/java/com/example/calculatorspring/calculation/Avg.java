@@ -1,5 +1,8 @@
 package com.example.calculatorspring.calculation;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Avg implements Calculation{
 
     @Override
@@ -11,8 +14,4 @@ public class Avg implements Calculation{
         return (float) summarize/array.length;
     }
 
-    @Override
-    public String GetDefinition(Object digit) {
-        return String.format("Avg digit is %.2f", digit);
-    }
 }

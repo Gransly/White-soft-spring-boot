@@ -1,5 +1,8 @@
 package com.example.calculatorspring.calculation;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Min implements Calculation{
     @Override
     public Object CalculateValue(int[] array) {
@@ -12,8 +15,5 @@ public class Min implements Calculation{
         return minInt;
     }
 
-    @Override
-    public String GetDefinition(Object digit) {
-        return String.format("Min: %d", digit);
-    }
+
 }

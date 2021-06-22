@@ -1,5 +1,8 @@
 package com.example.calculatorspring.calculation;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Max implements Calculation{
 
     @Override
@@ -13,8 +16,5 @@ public class Max implements Calculation{
         return  maxInt;
     }
 
-    @Override
-    public String GetDefinition(Object digit) {
-        return String.format("Max: %d", digit);
-    }
+
 }

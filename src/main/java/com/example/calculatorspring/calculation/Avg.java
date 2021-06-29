@@ -1,17 +1,18 @@
 package com.example.calculatorspring.calculation;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+@Order(4)
 @Component
-public class Avg implements Calculation{
+@ConditionalOnProperty(name = "count_alg.int.average.enabled", havingValue = "true")
+public class Avg implements Calculation {
 
     @Override
-    public Object CalculateValue(int[] array) {
-        int summarize = 0;
-        for (Integer number : array) {
-            summarize += number;
-        }
-        return (float) summarize/array.length;
+    public double calculateValue(int[] array) {
+        return Arrays.stream(array).average().getAsDouble();
     }
 
 }

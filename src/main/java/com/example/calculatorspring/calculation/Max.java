@@ -1,20 +1,19 @@
 package com.example.calculatorspring.calculation;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
+@Order(2)
 @Component
-public class Max implements Calculation{
+@ConditionalOnProperty(name = "count_alg.int.max.enabled", havingValue = "true")
+public class Max implements Calculation {
 
     @Override
-    public Object CalculateValue(int[] array) {
-        int maxInt = 0;
-        for (Integer number : array) {
-            if (maxInt < number) {
-                maxInt = number;
-            }
-        }
-        return  maxInt;
+    public double calculateValue(int[] array) {
+        return Arrays.stream(array).max().getAsInt();
     }
-
 
 }

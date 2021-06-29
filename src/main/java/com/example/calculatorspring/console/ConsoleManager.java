@@ -1,39 +1,43 @@
 package com.example.calculatorspring.console;
 
 import com.example.calculatorspring.calculation.Calculation;
-import com.example.calculatorspring.calculator.Calculator;
-import com.example.calculatorspring.utility.Input;
-import lombok.AllArgsConstructor;
+import com.example.calculatorspring.utility.UserInput;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.Vector;
 
+@Profile("!test")
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ConsoleManager implements CommandLineRunner {
-    Calculator calculator;
+    private final List<Calculation> calculationList;
+
+
     @Override
     public void run(String... args) {
-        Scanner scanner = new Scanner(System.in);
-        String input;
-        while(true){
-            System.out.println("Number: ");
-            input= scanner.next();
-            if(Input.Validate(input)){
-                break;
+
+        try(Scanner scanner = new Scanner(System.in);) {
+            String input;
+            while (true) {
+                System.out.println("Number: ");
+                input = scanner.next();
+                if (UserInput.validate(input)) {
+                    break;
+                }
+                System.out.println("Error, invalid number.");
             }
-            System.out.println("Error, invalid number.");
+
+            int[] digits = UserInput.convertToIntArray(input);
+            for (Calculation operation : calculationList) {
+                double value = operation.calculateValue(digits);
+                System.out.println(value);
+            }
         }
 
-        int[] digits = Input.ConvertToIntArray(input);
-        List<String> descriptions = new Vector<>();
-        for (Calculation operation: calculator.getCalculationList()){
-            Object value = operation.CalculateValue(digits);
-            System.out.println(value);
-        }
 
     }
 }

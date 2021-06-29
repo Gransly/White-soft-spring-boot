@@ -6,16 +6,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MinTest {
 
+    Min minimal = new Min();
     @Test
     void calculateValue() {
-        //Arrange
-        int[] input = new int[]{0,1,2};
-        //Act
-        Min minimal = new Min();
 
-        int result = (int)minimal.CalculateValue(input);
+        //Arrange
+        int[] input = new int[]{0, 1, 2};
+
+        //Act
+        int result = (int) minimal.calculateValue(input);
+
         //Assert
         int expected = 0;
-        assertEquals(expected,result);
+        assertEquals(expected, result);
     }
 }

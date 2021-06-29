@@ -6,19 +6,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MaxTest {
 
+    Max maximal = new Max();
     @Test
     void calculateValue() {
-        //Arrange
-        int[] input = new int[]{0,1,2};
-        //Act
-        Max maximal = new Max();
 
-        int result = (int)maximal.CalculateValue(input);
+        //Arrange
+        int[] input = new int[]{0, 1, 2};
+
+        //Act
+        int result = (int) maximal.calculateValue(input);
+
         //Assert
         int expected = 2;
-        assertEquals(expected,result);
+        assertEquals(expected, result);
     }
-
-
 
 }

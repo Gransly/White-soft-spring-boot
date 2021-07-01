@@ -9,7 +9,6 @@ class UserInputTest {
 
     @Test
     void validateEmpty() {
-
         //Arrange
         String input = "";
 
@@ -17,12 +16,11 @@ class UserInputTest {
         boolean result = UserInput.validate(input);
 
         //Assert
-        assertFalse( result);
+        assertFalse(result);
     }
 
     @Test
     void validateSpaceBar() {
-
         //Arrange
         String input = " ";
 
@@ -30,13 +28,12 @@ class UserInputTest {
         boolean result = UserInput.validate(input);
 
         //Assert
-        assertFalse( result);
+        assertFalse(result);
     }
 
 
     @Test
     void validatePositiveNumbers() {
-
         //Arrange
         String input = "012345678";
 
@@ -51,7 +48,6 @@ class UserInputTest {
 
     @Test
     void validateInvalidNumber() {
-
         //Arrange
         String number = "-1";
 
@@ -61,9 +57,9 @@ class UserInputTest {
         //Assert
         assertFalse(validationResult);
     }
+
     @Test
     void validateZero() {
-
         //Arrange
         String number = "0";
 
@@ -73,9 +69,9 @@ class UserInputTest {
         //Assert
         assertTrue(validationResult);
     }
+
     @Test
     void validateNumberStartingWithZero() {
-
         //Arrange
         String number = "012";
 
@@ -89,7 +85,6 @@ class UserInputTest {
 
     @Test
     void convertToIntArray() {
-
         //Arrange
         String input = "012";
 
@@ -98,6 +93,47 @@ class UserInputTest {
 
         //Assert
         int[] expected = new int[]{0, 1, 2};
+
         assertArrayEquals(expected, result);
     }
+
+    @Test
+    void convertToIntArrayOneDigit() {
+        //Arrange
+        String input = "0";
+
+        //Act
+        int[] result = UserInput.convertToIntArray(input);
+
+        //Assert
+        int[] expected = new int[]{0};
+
+        assertArrayEquals(expected, result);
+    }
+
+    @Test
+    void convertToIntArrayNull() {
+        //Arrange
+        String input = null;
+
+        //Assert & Act
+        assertThrows(NullPointerException.class, ()->UserInput.convertToIntArray(input));
+
+    }
+    @Test
+    void convertToIntArrayEmptyString() {
+        //Arrange
+        String input = "";
+
+        //Act
+        int[] result = UserInput.convertToIntArray(input);
+
+        //Assert
+        int[] expected = new int[]{};
+
+        assertArrayEquals(expected, result);
+
+    }
+
+
 }

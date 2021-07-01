@@ -16,11 +16,10 @@ import java.util.Scanner;
 public class ConsoleManager implements CommandLineRunner {
     private final List<Calculation> calculationList;
 
-
     @Override
     public void run(String... args) {
 
-        try(Scanner scanner = new Scanner(System.in);) {
+        try (Scanner scanner = new Scanner(System.in);) {
             String input;
             while (true) {
                 System.out.println("Number: ");
@@ -37,7 +36,6 @@ public class ConsoleManager implements CommandLineRunner {
                 System.out.println(value);
             }
         }
-
 
     }
 }

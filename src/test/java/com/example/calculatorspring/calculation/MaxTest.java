@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MaxTest {
 
-    Max maximal = new Max();
+    private Max maximal = new Max();
+
     @Test
     void calculateValue() {
-
         //Arrange
         int[] input = new int[]{0, 1, 2};
 

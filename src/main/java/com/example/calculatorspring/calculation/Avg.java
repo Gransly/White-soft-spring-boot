@@ -5,6 +5,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+
 @Order(4)
 @Component
 @ConditionalOnProperty(name = "count_alg.int.average.enabled", havingValue = "true")

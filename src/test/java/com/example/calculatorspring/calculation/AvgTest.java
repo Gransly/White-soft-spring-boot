@@ -6,18 +6,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AvgTest {
 
-    Avg average = new Avg();
+    private Avg average = new Avg();
+
     @Test
     void calculateValue() {
-
         //Arrange
         int[] input = new int[]{0, 1, 2};
 
         //Act
-        float result = (float) average.calculateValue(input);
+        double result = average.calculateValue(input);
 
         //Assert
-        float expected = 1;
+        double expected = 1;
         assertEquals(expected, result);
     }
 }

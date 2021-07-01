@@ -4,11 +4,11 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class UserInput {
-    public static boolean validate(String input){
+    public static boolean validate(String input) {
         return !input.isEmpty() && input.matches("[0-9]+");
     }
 
-    public int[] convertToIntArray(String input){
+    public int[] convertToIntArray(String input) {
         return input.chars().map(Character::getNumericValue).toArray();
     }
 }

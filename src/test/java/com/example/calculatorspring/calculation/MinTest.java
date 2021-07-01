@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MinTest {
 
-    Min minimal = new Min();
+    private Min minimal = new Min();
+
     @Test
     void calculateValue() {
-
         //Arrange
         int[] input = new int[]{0, 1, 2};
 

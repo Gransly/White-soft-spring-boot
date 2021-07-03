@@ -18,7 +18,13 @@ public class Controller {
 
     @PostMapping("calculator/all")
     public List<Double> getCalculationResult(
-            @RequestParam(name = "inputString") String inputString) {
+            @RequestParam(name = "inputString", required = true) String inputString) throws Exception {
+
+        if (!UserInput.validate(inputString)) {
+            throw new Exception("Bad request!");
+        }
+
+
 
         List<Double> answer = new ArrayList<>();
         int[] digits = UserInput.convertToIntArray(inputString);

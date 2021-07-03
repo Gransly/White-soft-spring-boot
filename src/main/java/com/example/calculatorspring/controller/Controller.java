@@ -1,6 +1,7 @@
 package com.example.calculatorspring.controller;
 
 import com.example.calculatorspring.calculation.Calculation;
+import com.example.calculatorspring.check.impl.UserInputChecker;
 import com.example.calculatorspring.utility.UserInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,15 +16,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class Controller {
     private final List<Calculation> calculationList;
+    UserInputChecker userInputChecker = new UserInputChecker();
 
     @PostMapping("calculator/all")
     public List<Double> getCalculationResult(
             @RequestParam(name = "inputString", required = true) String inputString) throws Exception {
-
-        if (!UserInput.validate(inputString)) {
-            throw new Exception("Bad request!");
-        }
-
+        userInputChecker.execute(inputString);
 
 
         List<Double> answer = new ArrayList<>();

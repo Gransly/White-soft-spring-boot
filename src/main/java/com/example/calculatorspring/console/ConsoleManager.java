@@ -4,6 +4,7 @@ import com.example.calculatorspring.calculation.Calculation;
 import com.example.calculatorspring.utility.UserInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import java.util.Scanner;
 @Profile("!test")
 @Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "consoleManager.enabled", havingValue = "true")
 public class ConsoleManager implements CommandLineRunner {
     private final List<Calculation> calculationList;
 

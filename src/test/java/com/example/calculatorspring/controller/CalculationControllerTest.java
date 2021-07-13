@@ -1,5 +1,6 @@
 package com.example.calculatorspring.controller;
 
+import com.example.calculatorspring.check.exception.DevilNumberException;
 import com.example.calculatorspring.controller.dto.ErrorDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -54,7 +55,7 @@ class CalculationControllerTest {
                            .andExpect(status().isBadRequest())
                            .andReturn();
         errorDto = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), ErrorDto.class);
-        expectedMessage = "Wrong user input";
+        expectedMessage = "Error, input should contain number>0";
         assertEquals(errorDto.getMessage(), expectedMessage);
     }
 
@@ -71,7 +72,7 @@ class CalculationControllerTest {
                            .andExpect(status().isBadRequest())
                            .andReturn();
         errorDto = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), ErrorDto.class);
-        expectedMessage = "Wrong user input";
+        expectedMessage = "Error, input should contain number>0";
         assertEquals(errorDto.getMessage(), expectedMessage);
     }
 
@@ -88,8 +89,86 @@ class CalculationControllerTest {
                            .andExpect(status().isBadRequest())
                            .andReturn();
         errorDto = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), ErrorDto.class);
-        expectedMessage = "Wrong user input";
+        expectedMessage = "Error, input should contain number>0";
         assertEquals(errorDto.getMessage(), expectedMessage);
+    }
+
+    @Test
+    void getCalculationDevilNumber() throws Exception {
+        //Arrange
+        String inputString = "666";
+
+        //Act
+        String actual = mockMvc.perform(MockMvcRequestBuilders
+                                            .post("/calculator/all")
+                                            .param("inputString", inputString))
+                           //Assert
+                           .andExpect(status().isBadRequest())
+                           .andReturn().getResponse().getContentAsString();
+
+        ErrorDto errorDto = objectMapper.readValue(actual, ErrorDto.class);
+
+        String expected = "Devil is above, input contain 666";
+        assertEquals(errorDto.getMessage(), expected);
+    }
+
+    @Test
+    void getCalculationLongNumber() throws Exception {
+        //Arrange
+        String inputString = "123123123123143243243242342344121231" +
+                             "2312312312312312312312312312313233234234234234234" +
+                             "23423423423423423423423423423423423";
+
+        //Act
+        String actual = mockMvc.perform(MockMvcRequestBuilders
+                                                .post("/calculator/all")
+                                                .param("inputString", inputString))
+                               //Assert
+                               .andExpect(status().isBadRequest())
+                               .andReturn().getResponse().getContentAsString();
+
+        ErrorDto errorDto = objectMapper.readValue(actual, ErrorDto.class);
+
+        String expected = "Input number contains more then 100 digits";
+        assertEquals(errorDto.getMessage(), expected);
+    }
+
+    @Test
+    void getCalculationMasterNumber() throws Exception {
+        //Arrange
+        String inputString = "999942";
+
+        //Act
+        String actual = mockMvc.perform(MockMvcRequestBuilders
+                                                .post("/calculator/all")
+                                                .param("inputString", inputString))
+                               //Assert
+                               .andExpect(status().isBadRequest())
+                               .andReturn().getResponse().getContentAsString();
+
+        ErrorDto errorDto = objectMapper.readValue(actual, ErrorDto.class);
+
+        String expected = "42 sum is here!";
+        assertEquals(errorDto.getMessage(), expected);
+    }
+
+    @Test
+    void getCalculationWrongAvg() throws Exception {
+        //Arrange
+        String inputString = "333333";
+
+        //Act
+        String actual = mockMvc.perform(MockMvcRequestBuilders
+                                                .post("/calculator/all")
+                                                .param("inputString", inputString))
+                               //Assert
+                               .andExpect(status().isBadRequest())
+                               .andReturn().getResponse().getContentAsString();
+
+        ErrorDto errorDto = objectMapper.readValue(actual, ErrorDto.class);
+
+        String expected = "Error, Avg is 3 or 7!";
+        assertEquals(errorDto.getMessage(), expected);
     }
 
 }

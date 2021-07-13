@@ -48,6 +48,27 @@
             <version>1.5.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>4.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jupiter-tools</groupId>
+            <artifactId>spring-test-postgres</artifactId>
+            <version>0.4</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -62,6 +83,54 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <version>${mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <version>${lombok-mapstruct-binding.version}</version>
+                        </path>
+                        <path>
+                            <groupId>com.querydsl</groupId>
+                            <artifactId>querydsl-apt</artifactId>
+                            <version>${querydsl.version}</version>
+                            <classifier>jpa</classifier>
+                        </path>
+                        <path>
+                            <groupId>javax.annotation</groupId>
+                            <artifactId>javax.annotation-api</artifactId>
+                            <version>${javax-annotation.version}</version>
+                        </path>
+                        <path>
+                            <groupId>javax.persistence</groupId>
+                            <artifactId>javax.persistence-api</artifactId>
+                            <version>${javax-persistence.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <compilerArgs>
+                        <!-- задание компонентной модели для сгенерированных мапперов по-умолчанию -->
+                        <compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>
+                        <arg>-Aquerydsl.entityAccessors=true</arg>
+                        <arg>-Aquerydsl.useFields=false</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>

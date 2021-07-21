@@ -38,7 +38,7 @@ class CalculationControllerTest {
                            //Assert
                            .andExpect(status().isOk())
                            .andReturn();
-        String expected = "[1.0,4.0,10.0,2.5]";
+        String expected = "1.0, 4.0, 10.0, 2.5";
         assertEquals(expected, mvcResult.getResponse().getContentAsString());
     }
 
@@ -151,24 +151,4 @@ class CalculationControllerTest {
         String expected = "42 sum is here!";
         assertEquals(errorDto.getMessage(), expected);
     }
-
-    @Test
-    void getCalculationWrongAvg() throws Exception {
-        //Arrange
-        String inputString = "333333";
-
-        //Act
-        String actual = mockMvc.perform(MockMvcRequestBuilders
-                                                .post("/calculator/all")
-                                                .param("inputString", inputString))
-                               //Assert
-                               .andExpect(status().isBadRequest())
-                               .andReturn().getResponse().getContentAsString();
-
-        ErrorDto errorDto = objectMapper.readValue(actual, ErrorDto.class);
-
-        String expected = "Error, Avg is 3 or 7!";
-        assertEquals(errorDto.getMessage(), expected);
-    }
-
 }

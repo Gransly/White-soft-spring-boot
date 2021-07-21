@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,11 +20,11 @@ public class MathExpressions {
 
     private String result;
 
-    private LocalDateTime createDate;
+    private LocalDateTime creationDate;
 
     @PrePersist
     public void prePersist() {
-        createDate = LocalDateTime.now();
+        creationDate = LocalDateTime.now();
     }
 
 }

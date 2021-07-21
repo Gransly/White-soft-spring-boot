@@ -1,9 +1,9 @@
 package com.example.calculatorspring.service;
 
 import com.example.calculatorspring.calculation.Calculation;
-import com.example.calculatorspring.check.impl.UserInputChecker;
 import com.example.calculatorspring.utility.UserInput;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public class CalculatorService {
 
     private final List<Calculation> calculationList;
 
-    public List<Double> getCalculations(String inputString){
+    public String getCalculations(String inputString){
 
 
         List<Double> answer = new ArrayList<>();
@@ -25,7 +25,8 @@ public class CalculatorService {
             answer.add(value);
         }
 
-        return answer;
+        String resultString = StringUtils.join(answer, ", ");
+        return resultString;
 
     }
 }

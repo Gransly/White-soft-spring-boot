@@ -1,6 +1,8 @@
 package com.example.calculatorspring.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

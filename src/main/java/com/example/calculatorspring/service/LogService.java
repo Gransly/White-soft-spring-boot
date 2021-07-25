@@ -1,9 +1,16 @@
 package com.example.calculatorspring.service;
 
+import com.google.common.collect.Lists;
 import com.example.calculatorspring.entity.MathExpressions;
+import com.example.calculatorspring.entity.QMathExpressions;
 import com.example.calculatorspring.repository.LogRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,4 +27,31 @@ public class LogService {
 
         repository.save(expression);
     }
+
+    public List<MathExpressions> exportLogExpression(){
+        return repository.findAll(Sort.by(Sort.Direction.DESC,"creationDate"));
+    }
+
+    public List<MathExpressions> exportLogExpressionByAfterDate(LocalDateTime afterDate){
+
+        return Lists.newArrayList(repository.findAll(QMathExpressions.mathExpressions.creationDate.after(afterDate)));
+    }
+
+    public List<MathExpressions> exportLogExpressionByBeforeDate(LocalDateTime beforeDate){
+
+        return Lists.newArrayList(repository.findAll(QMathExpressions.mathExpressions.creationDate.before(beforeDate)));
+    }
+
+    public List<MathExpressions> exportLogExpressionByBetweenDate(LocalDateTime beforeDate, LocalDateTime afterDate){
+
+        return Lists.newArrayList(repository.findAll(QMathExpressions.mathExpressions.creationDate.between(beforeDate,afterDate)));
+    }
+
+    public List<MathExpressions> exportLogExpressionByInputExcluding(Integer min, Integer max){
+
+        return Lists.newArrayList(repository.findAll(QMathExpressions.mathExpressions.number.between(min,max)));
+    }
+
+
+
 }

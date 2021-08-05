@@ -1,6 +1,5 @@
 package com.example.calculatorspring.controller;
 
-import com.example.calculatorspring.check.exception.DevilNumberException;
 import com.example.calculatorspring.controller.dto.ErrorDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -11,12 +10,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class CalculationControllerTest {
+class CalculationControllerIT {
 
     private MvcResult mvcResult;
     private ErrorDto errorDto;

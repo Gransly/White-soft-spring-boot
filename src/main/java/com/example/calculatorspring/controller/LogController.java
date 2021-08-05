@@ -33,9 +33,8 @@ public class LogController {
 
     @GetMapping("log/all")
     @Operation(summary = "Returns all log math expressions sorted by date")
-    public List<MathExpressionsDto> getLog(@PageableDefault(sort = "creationDate", direction = DESC)
-                                           Pageable pageable) {
-        List<MathExpressions> expressions = logService.exportLogExpression(pageable);
+    public List<MathExpressionsDto> getLog() {
+        List<MathExpressions> expressions = logService.exportLogExpression();
 
         return expressions.stream()
                     .map(DtoConverter::convertToDto)
@@ -64,13 +63,6 @@ public class LogController {
                                                               @RequestParam("afterDate")
                                                               @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime afterDate) {
         return logService.exportLogExpressionByBetweenDate(beforeDate, afterDate);
-    }
-
-    @GetMapping("log/byNumber")
-    @Operation(summary = "Returns all log math expressions sorted by date")
-    public List<MathExpressions> getLogByNumberExcluding(@RequestParam(name = "min") Integer min,
-                                                         @RequestParam(name = "max") Integer max) {
-        return logService.exportLogExpressionByInputExcluding(min, max);
     }
 
 

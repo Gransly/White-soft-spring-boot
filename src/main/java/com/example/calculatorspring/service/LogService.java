@@ -5,7 +5,6 @@ import com.example.calculatorspring.entity.QMathExpressions;
 import com.example.calculatorspring.repository.LogRepository;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

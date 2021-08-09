@@ -1,14 +1,11 @@
 package com.example.calculatorspring.service.notification;
 
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -24,14 +21,12 @@ public class TelegramBotNotification implements Notification {
     @Override
     public void sendNotification(NotificationMessage messageArg) {
 
-        StringBuilder message = new StringBuilder()
-                .append("\uD83D\uDD58 Call time: ")
-                .append(messageArg.getCallTime())
-                .append('\n')
-                .append("Error method name: ")
-                .append(messageArg.getMethodName());
-
-        sendMessageViaBot(message.toString());
+        String message = "\uD83D\uDD58 Call time: " +
+                         messageArg.getCallTime() +
+                         '\n' +
+                         "Error method name: " +
+                         messageArg.getMethodName();
+        sendMessageViaBot(message);
     }
 
     public void sendMessageViaBot(String message) {

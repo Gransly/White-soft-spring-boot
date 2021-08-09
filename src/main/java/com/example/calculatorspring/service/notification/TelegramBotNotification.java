@@ -21,7 +21,7 @@ public class TelegramBotNotification implements Notification {
     @Override
     public void sendNotification(NotificationMessage messageArg) {
 
-        String message = "\uD83D\uDD58 Call time: " +
+        String message = "Call time: " +
                          messageArg.getCallTime() +
                          '\n' +
                          "Error method name: " +

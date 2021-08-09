@@ -2,9 +2,7 @@ package com.example.calculatorspring.aspect;
 
 import com.example.calculatorspring.service.notification.NotificationMessage;
 import com.example.calculatorspring.service.notification.TelegramBotNotification;
-import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.jupiter.tools.spring.test.postgres.annotation.meta.EnablePostgresIntegrationTest;
-import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +35,7 @@ class NotificationAspectIT {
     ArgumentCaptor<NotificationMessage> messageCaptor;
 
     @Test
-    void testSendRequestDevilError(SoftAssertions softly) {
+    void testSendRequestDevilError() {
         //Act
         String actual = webTestClient
                 .post()
@@ -64,7 +62,7 @@ class NotificationAspectIT {
     }
 
     @Test
-    void testSendRequestInputForbiddenError(SoftAssertions softly) {
+    void testSendRequestInputForbiddenError() {
         //Act
         String actual = webTestClient
                 .post()
@@ -91,7 +89,7 @@ class NotificationAspectIT {
     }
 
     @Test
-    void testSendRequestLongNumberError(SoftAssertions softly) {
+    void testSendRequestLongNumberError() {
 
         //Arrange
         String number = String.join("", Collections.nCopies(100, "2"));
@@ -121,7 +119,7 @@ class NotificationAspectIT {
     }
 
     @Test
-    void testSendRequestMasterNumberError(SoftAssertions softly) {
+    void testSendRequestMasterNumberError() {
         //Act
         String actual = webTestClient
                 .post()

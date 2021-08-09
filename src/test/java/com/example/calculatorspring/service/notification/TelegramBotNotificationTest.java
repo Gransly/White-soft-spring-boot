@@ -38,7 +38,7 @@ class TelegramBotNotificationTest {
         telegramBotNotification.sendNotification(messageArg);
 
         //Assert
-        String expectedMessage = "\uD83D\uDD58 Call time: " +
+        String expectedMessage = "Call time: " +
                          messageArg.getCallTime() +
                          '\n' +
                          "Error method name: " +

@@ -25,8 +25,7 @@ public class CalculatorService {
             answer.add(value);
         }
 
-        String resultString = StringUtils.join(answer, ", ");
-        return resultString;
+        return StringUtils.join(answer, ", ");
 
     }
 }

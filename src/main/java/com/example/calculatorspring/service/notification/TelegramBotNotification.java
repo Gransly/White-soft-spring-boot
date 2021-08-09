@@ -26,10 +26,10 @@ public class TelegramBotNotification implements Notification {
                          '\n' +
                          "Error method name: " +
                          messageArg.getMethodName();
-        sendMessageViaBot(message);
+        sendMessageToBot(message);
     }
 
-    public void sendMessageViaBot(String message) {
+    public void sendMessageToBot(String message) {
 
         UriComponents uri = UriComponentsBuilder.newInstance()
                                                 .scheme("https")

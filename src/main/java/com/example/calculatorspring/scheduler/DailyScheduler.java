@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class DailyScheduler {
@@ -21,7 +19,7 @@ public class DailyScheduler {
 
     private final List<Notification> notifiers;
 
-    @Scheduled(cron = "0 2 * * * *")
+    @Scheduled(cron = "${schedule.summary,cron}")
     public void sendDailyInfo() {
         LocalDateTime dateTime = LocalDateTime.now();
 

@@ -1,5 +1,7 @@
 package com.example.calculatorspring.service.notification;
 
+import com.example.calculatorspring.entity.DailySummaryMessage;
+import com.example.calculatorspring.entity.NotificationMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,13 +23,32 @@ public class TelegramBotNotification implements Notification {
     @Override
     public void sendNotification(NotificationMessage messageArg) {
 
-        String message = "Call time: " +
+        String message = "\\\\Error notify//\n"+
+                         "Call time: " +
                          messageArg.getCallTime() +
                          '\n' +
                          "Error method name: " +
                          messageArg.getMethodName();
         sendMessageToBot(message);
     }
+
+    @Override
+    public void sendDaily(DailySummaryMessage messageArg) {
+        String message = "\\\\Daily summary//\n"+
+                         "Call time:" +
+                         messageArg.getCallTime()+
+                         '\n'+
+                         "Overall successful requests:"+
+                         messageArg.getRequestCount()+
+                         '\n'+
+                         "Max input:"+
+                         messageArg.getMaxInput()+
+                         '\n'+
+                         "Min input:"+
+                         messageArg.getMinInput();
+        sendMessageToBot(message);
+    }
+
 
     public void sendMessageToBot(String message) {
 

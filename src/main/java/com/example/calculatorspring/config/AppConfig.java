@@ -1,4 +1,4 @@
-package com.example.calculatorspring;
+package com.example.calculatorspring.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

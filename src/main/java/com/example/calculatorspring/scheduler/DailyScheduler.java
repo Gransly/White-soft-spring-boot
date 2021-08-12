@@ -22,7 +22,7 @@ public class DailyScheduler {
     private final List<Notification> notifiers;
 
     @Scheduled(cron = "0 2 * * * *")
-    public void reportCurrentTime() {
+    public void sendDailyInfo() {
         LocalDateTime dateTime = LocalDateTime.now();
 
         DailySummaryMessage message = DailySummaryMessage.builder()

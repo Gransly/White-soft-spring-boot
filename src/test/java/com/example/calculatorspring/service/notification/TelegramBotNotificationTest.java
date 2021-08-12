@@ -1,5 +1,6 @@
 package com.example.calculatorspring.service.notification;
 
+import com.example.calculatorspring.entity.NotificationMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

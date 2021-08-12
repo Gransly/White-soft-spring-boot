@@ -1,6 +1,6 @@
 package com.example.calculatorspring.aspect;
 
-import com.example.calculatorspring.service.notification.NotificationMessage;
+import com.example.calculatorspring.entity.NotificationMessage;
 import com.example.calculatorspring.service.notification.TelegramBotNotification;
 import com.jupiter.tools.spring.test.postgres.annotation.meta.EnablePostgresIntegrationTest;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;

@@ -1,7 +1,7 @@
 package com.example.calculatorspring.aspect;
 
 import com.example.calculatorspring.service.notification.Notification;
-import com.example.calculatorspring.service.notification.NotificationMessage;
+import com.example.calculatorspring.entity.NotificationMessage;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;

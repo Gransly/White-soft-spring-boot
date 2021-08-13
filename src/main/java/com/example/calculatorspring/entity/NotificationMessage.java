@@ -1,4 +1,4 @@
-package com.example.calculatorspring.service.notification;
+package com.example.calculatorspring.entity;
 
 import lombok.Builder;
 import lombok.Getter;

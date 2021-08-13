@@ -1,7 +1,9 @@
 package com.example.calculatorspring.service.notification;
 
+import com.example.calculatorspring.config.WebClientConfiguration;
+import com.example.calculatorspring.entity.NotificationMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponents;
@@ -11,12 +13,19 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 public class TelegramBotNotification implements Notification {
 
-    @Value("${telegram.bot-token}")
-    String botToken;
-    @Value("${telegram.bot-id}")
-    String chatId;
 
-    WebClient client = WebClient.create();
+    public final String TELEGRAM_BOT_TOKEN;
+    public final String TELEGRAM_BOT_CHAT_ID;
+    private final WebClient webClient;
+
+
+    public TelegramBotNotification(Environment environment, WebClientConfiguration webClientBuilder) {
+        TELEGRAM_BOT_TOKEN = environment.getRequiredProperty("telegram.bot-token");
+        TELEGRAM_BOT_CHAT_ID = environment.getRequiredProperty("telegram.bot-id");
+        webClient = webClientBuilder.myWebClient();
+    }
+
+
 
     @Override
     public void sendNotification(NotificationMessage messageArg) {
@@ -35,11 +44,10 @@ public class TelegramBotNotification implements Notification {
                                                 .scheme("https")
                                                 .host("api.telegram.org")
                                                 .path("/bot{token}/sendMessage")
-                                                .queryParam("chat_id", chatId)
+                                                .queryParam("chat_id", TELEGRAM_BOT_CHAT_ID)
                                                 .queryParam("text", message)
-                                                .buildAndExpand(botToken);
+                                                .buildAndExpand(TELEGRAM_BOT_TOKEN);
 
-
-        client.post().uri(uri.toUri()).retrieve().bodyToMono(Void.class).block();
+        webClient.post().uri(uri.toUri()).retrieve().bodyToMono(Void.class).block();
     }
 }

@@ -31,8 +31,19 @@ public class LogController {
         List<MathExpressions> expressions = logService.exportLogExpression();
 
         return expressions.stream()
-                    .map(DtoConverter::convertToDto)
+                    .map(DtoConverter::convertToMathExpressionDto)
                     .collect(Collectors.toList());
+    }
+
+    @GetMapping("log/search")
+    public List<MathExpressionsDto> getLogBySearch(@RequestBody SearchStats stats){
+
+        List<MathExpressions> expressions = logService.searchLogs(stats);
+
+
+        return expressions.stream()
+                          .map(DtoConverter::convertToMathExpressionDto)
+                          .collect(Collectors.toList());
     }
 
 

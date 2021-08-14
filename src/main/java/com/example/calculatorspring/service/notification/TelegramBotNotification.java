@@ -26,16 +26,26 @@ public class TelegramBotNotification implements Notification {
     }
 
 
-
     @Override
     public void sendNotification(NotificationMessage messageArg) {
 
         String message = "Call time: " +
                          messageArg.getCallTime() +
-                         '\n' +
-                         "Error method name: " +
-                         messageArg.getMethodName();
+                         "\nMethod name: " +
+                         messageArg.getMethodName()+
+                         "\nMethod name: " +
+                         messageArg.getDescription()+
+                         "\nSuccessful: ";
+
+        if (messageArg.getExceptionName().isEmpty()) {
+            message += "Yes";
+        } else {
+            message += "No\n"+
+                       "Cause:"+
+                       messageArg.getExceptionName();
+        }
         sendMessageToBot(message);
+
     }
 
     public void sendMessageToBot(String message) {

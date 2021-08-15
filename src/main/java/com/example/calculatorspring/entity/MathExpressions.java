@@ -22,7 +22,6 @@ public class MathExpressions {
 
     private String result;
 
-   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime creationDate;
 
     @PrePersist

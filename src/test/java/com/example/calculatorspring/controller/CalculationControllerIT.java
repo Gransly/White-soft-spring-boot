@@ -1,6 +1,5 @@
 package com.example.calculatorspring.controller;
 
-import com.example.calculatorspring.check.exception.DevilNumberException;
 import com.example.calculatorspring.controller.dto.ErrorDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -11,12 +10,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class CalculationControllerTest {
+class CalculationControllerIT {
 
     private MvcResult mvcResult;
     private ErrorDto errorDto;
@@ -38,7 +37,7 @@ class CalculationControllerTest {
                            //Assert
                            .andExpect(status().isOk())
                            .andReturn();
-        String expected = "[1.0,4.0,10.0,2.5]";
+        String expected = "1.0, 4.0, 10.0, 2.5";
         assertEquals(expected, mvcResult.getResponse().getContentAsString());
     }
 
@@ -151,24 +150,4 @@ class CalculationControllerTest {
         String expected = "42 sum is here!";
         assertEquals(errorDto.getMessage(), expected);
     }
-
-    @Test
-    void getCalculationWrongAvg() throws Exception {
-        //Arrange
-        String inputString = "333333";
-
-        //Act
-        String actual = mockMvc.perform(MockMvcRequestBuilders
-                                                .post("/calculator/all")
-                                                .param("inputString", inputString))
-                               //Assert
-                               .andExpect(status().isBadRequest())
-                               .andReturn().getResponse().getContentAsString();
-
-        ErrorDto errorDto = objectMapper.readValue(actual, ErrorDto.class);
-
-        String expected = "Error, Avg is 3 or 7!";
-        assertEquals(errorDto.getMessage(), expected);
-    }
-
 }

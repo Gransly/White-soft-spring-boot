@@ -6,17 +6,26 @@ import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.spring.api.DBRider;
 import com.jupiter.tools.spring.test.postgres.annotation.meta.EnablePostgresIntegrationTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.util.LinkedMultiValueMap;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Stream;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @DBRider
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -45,14 +54,14 @@ class LogControllerIT {
                 .returnResult().getResponseBody();
 
         List<MathExpressionsDto> expected = new ArrayList<>();
+
         MathExpressionsDto dto = new MathExpressionsDto();
-        UUID uuid = UUID.fromString("75e5f3bb-e8ce-482c-836b-198dc7c7c177");
-        LocalDateTime dateTime = LocalDateTime.parse("2021-07-27 15:45:44.254",
-                                                     DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
-        dto.setId(uuid);
+        dto.setId(UUID.fromString("75e5f3bb-e8ce-482c-836b-198dc7c7c177"));
         dto.setNumber(1);
         dto.setResult("1.0, 1.0, 1.0, 1.0");
-        dto.setCreationDate(dateTime);
+        dto.setCreationDate(LocalDateTime.parse("2021-08-14 17:58:29",
+                                                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
         expected.add(dto);
 
         //Assert
@@ -81,117 +90,86 @@ class LogControllerIT {
     }
 
 
-    @Test
-    @DataSet(cleanBefore = true, cleanAfter = true, value = "datasets/number_dataset_date.json")
-    @ExpectedDataSet("datasets/number_dataset_date.json")
-    void getLogResultAfterDate(){
-        //Arrange
-        String date = "2021-07-27T16:45:44.254";
+    @ParameterizedTest
+    @MethodSource("dataForSearchFunctionalityTest")
+    @DataSet(cleanAfter = true, cleanBefore = true, value = "number_dataset_filter.json")
+    @ExpectedDataSet(value = "number_dataset_filter.json")
+    void getFilteredLog(LinkedMultiValueMap<String, String> args, MathExpressionsDto expected){
 
 
-        List<MathExpressionsDto> actual = webTestClient
+
+        List<MathExpressionsDto> filteredList= webTestClient
                 .get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("log/byAfterDate/") //Base-path for invoking the 3rd party service.
-                        .queryParam("date",date)
+                        .path("log/search")
+                        .queryParams(args)
                         .build())
                 .exchange()
 
-                //Act
+                //Assert
                 .expectStatus().isOk()
                 .expectBody(new ParameterizedTypeReference<List<MathExpressionsDto>>() {
                 })
                 .returnResult().getResponseBody();
 
-        List<MathExpressionsDto> expected = new ArrayList<>();
-        MathExpressionsDto dto = new MathExpressionsDto();
-        UUID uuid = UUID.fromString("75e5f3bb-e8ce-482c-836b-198dc7c7c179");
-        LocalDateTime dateTime = LocalDateTime.parse("2021-07-27 17:45:44.254",
-                                                     DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
-        dto.setId(uuid);
-        dto.setNumber(1);
-        dto.setResult("1.0, 1.0, 1.0, 1.0");
-        dto.setCreationDate(dateTime);
-        expected.add(dto);
-
-        //Assert
-        assertEquals(expected, actual);
+        assertNotNull(filteredList);
+        assertEquals(filteredList.size(), 1);
+        MathExpressionsDto actual = filteredList.get(0);
+        assertThat(actual).usingRecursiveComparison().withStrictTypeChecking().isEqualTo(expected);
     }
 
-    @Test
-    @DataSet(cleanBefore = true, cleanAfter = true, value = "datasets/number_dataset_date.json")
-    @ExpectedDataSet("datasets/number_dataset_date.json")
-    void getLogResultBeforeDate(){
-        //Arrange
-        String date = "2021-07-27T16:45:44.254";
+
+    static Stream<Arguments> dataForSearchFunctionalityTest() {
+
+        LinkedMultiValueMap<String, String> searchByFromDate = new LinkedMultiValueMap<String, String>() {{
+            add("fromDate", "2021-08-14 17:59:29");
+        }};
+
+        LinkedMultiValueMap<String, String> searchByResult = new LinkedMultiValueMap<String, String>() {{
+            add("result", "1");
+        }};
+
+        LinkedMultiValueMap<String, String> searchByInput = new LinkedMultiValueMap<String, String>() {{
+            add("input", "2");
+        }};
+
+        LinkedMultiValueMap<String, String> searchByResultAndToDate = new LinkedMultiValueMap<String, String>() {{
+            add("result", "1");
+            add("toDate", "2022-08-14 17:58:29");
+        }};
 
 
-        List<MathExpressionsDto> actual = webTestClient
-                .get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("log/byBeforeDate/") //Base-path for invoking the 3rd party service.
-                        .queryParam("date",date)
-                        .build())
-                .exchange()
+        MathExpressionsDto firstExpectedResult = new MathExpressionsDto();
+        firstExpectedResult.setId(UUID.fromString("75e5f3bb-e8ce-482c-836b-198dc7c7c177"));
+        firstExpectedResult.setNumber(1);
+        firstExpectedResult.setResult("1");
+        firstExpectedResult.setCreationDate(LocalDateTime.parse("2021-08-14 17:58:29",
+                                                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
-                //Act
-                .expectStatus().isOk()
-                .expectBody(new ParameterizedTypeReference<List<MathExpressionsDto>>() {
-                })
-                .returnResult().getResponseBody();
+        MathExpressionsDto secondExpectedResult = new MathExpressionsDto();
+        secondExpectedResult.setId(UUID.fromString("75e5f3bb-e8ce-482c-836b-198dc7c7c178"));
+        secondExpectedResult.setNumber(2);
+        secondExpectedResult.setResult("2");
+        secondExpectedResult.setCreationDate(LocalDateTime.parse("2021-08-14 20:58:29",
+                                                                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
-        List<MathExpressionsDto> expected = new ArrayList<>();
-        MathExpressionsDto dto = new MathExpressionsDto();
-        UUID uuid = UUID.fromString("75e5f3bb-e8ce-482c-836b-198dc7c7c177");
-        LocalDateTime dateTime = LocalDateTime.parse("2021-07-27 15:45:44.254",
-                                                     DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
-        dto.setId(uuid);
-        dto.setNumber(1);
-        dto.setResult("1.0, 1.0, 1.0, 1.0");
-        dto.setCreationDate(dateTime);
-        expected.add(dto);
 
-        //Assert
-        assertEquals(expected, actual);
+        return Stream.of(
+                arguments(
+                        searchByFromDate,
+                        secondExpectedResult),
+
+                arguments(
+                        searchByResult,
+                        firstExpectedResult),
+
+                arguments(
+                        searchByInput,
+                        secondExpectedResult),
+
+                arguments(
+                        searchByResultAndToDate,
+                        firstExpectedResult)
+                        );
     }
-
-    @Test
-    @DataSet(cleanBefore = true, cleanAfter = true, value = "datasets/number_dataset_date.json")
-    @ExpectedDataSet("datasets/number_dataset_date.json")
-    void getLogResultBetweenDate(){
-        //Arrange
-        String dateBefore = "2021-07-27T15:45:44.255";
-        String dateAfter= "2021-07-27T17:45:44.253";
-
-
-        List<MathExpressionsDto> actual = webTestClient
-                .get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("log/byBetweenDate/") //Base-path for invoking the 3rd party service.
-                        .queryParam("beforeDate",dateBefore)
-                        .queryParam("afterDate",dateAfter)
-                        .build())
-                .exchange()
-
-                //Act
-                .expectStatus().isOk()
-                .expectBody(new ParameterizedTypeReference<List<MathExpressionsDto>>() {
-                })
-                .returnResult().getResponseBody();
-
-        List<MathExpressionsDto> expected = new ArrayList<>();
-        MathExpressionsDto dto = new MathExpressionsDto();
-        UUID uuid = UUID.fromString("75e5f3bb-e8ce-482c-836b-198dc7c7c178");
-        LocalDateTime dateTime = LocalDateTime.parse("2021-07-27 16:45:44.254",
-                                                     DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
-        dto.setId(uuid);
-        dto.setNumber(1);
-        dto.setResult("1.0, 1.0, 1.0, 1.0");
-        dto.setCreationDate(dateTime);
-        expected.add(dto);
-
-        //Assert
-        assertEquals(expected, actual);
-    }
-
 }

@@ -1,9 +1,10 @@
 package com.example.calculatorspring.service.notification;
 
+import com.example.calculatorspring.config.WebClientConfiguration;
 import com.example.calculatorspring.entity.DailySummaryMessage;
 import com.example.calculatorspring.entity.NotificationMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponents;

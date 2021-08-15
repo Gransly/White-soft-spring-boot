@@ -2,8 +2,11 @@ package com.example.calculatorspring.service;
 
 import com.example.calculatorspring.entity.MathExpressions;
 import com.example.calculatorspring.entity.QMathExpressions;
+import com.example.calculatorspring.entity.SearchStats;
+import com.example.calculatorspring.filter.OptionalPredicate;
 import com.example.calculatorspring.repository.LogRepository;
 import com.google.common.collect.Lists;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,21 +39,16 @@ public class LogService {
     }
 
     @Transactional(readOnly = true)
-    public List<MathExpressions> exportLogExpressionByAfterDate(LocalDateTime afterDate){
+    public List<MathExpressions> searchLogs(SearchStats stats){
 
-        return Lists.newArrayList(repository.findAll(QMathExpressions.mathExpressions.creationDate.after(afterDate)));
-    }
+        Predicate predicate = OptionalPredicate.builder()
+                                               .optionalAnd(stats.getInput(), QMathExpressions.mathExpressions.number::eq)
+                                               .optionalAnd(stats.getResult(), QMathExpressions.mathExpressions.result::eq)
+                                               .optionalAnd(stats.getFromDate(), QMathExpressions.mathExpressions.creationDate::goe)
+                                               .optionalAnd(stats.getToDate(), QMathExpressions.mathExpressions.creationDate::loe)
+                                               .build();
 
-    @Transactional(readOnly = true)
-    public List<MathExpressions> exportLogExpressionByBeforeDate(LocalDateTime beforeDate){
-
-        return Lists.newArrayList(repository.findAll(QMathExpressions.mathExpressions.creationDate.before(beforeDate)));
-    }
-
-    @Transactional(readOnly = true)
-    public List<MathExpressions> exportLogExpressionByBetweenDate(LocalDateTime beforeDate, LocalDateTime afterDate){
-
-        return Lists.newArrayList(repository.findAll(QMathExpressions.mathExpressions.creationDate.between(beforeDate,afterDate)));
+        return Lists.newArrayList(repository.findAll(predicate));
     }
 
     @Transactional(readOnly = true)

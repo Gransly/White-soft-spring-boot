@@ -13,22 +13,37 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 public class TelegramBotNotification implements Notification {
 
-    @Value("${telegram.bot-token}")
-    String botToken;
-    @Value("${telegram.bot-id}")
-    String chatId;
 
-    WebClient client = WebClient.create();
+    public final String TELEGRAM_BOT_TOKEN;
+    public final String TELEGRAM_BOT_CHAT_ID;
+    private final WebClient webClient;
+
+
+    public TelegramBotNotification(Environment environment, WebClientConfiguration webClientBuilder) {
+        TELEGRAM_BOT_TOKEN = environment.getRequiredProperty("telegram.bot-token");
+        TELEGRAM_BOT_CHAT_ID = environment.getRequiredProperty("telegram.bot-id");
+        webClient = webClientBuilder.myWebClient();
+    }
+
 
     @Override
     public void sendNotification(NotificationMessage messageArg) {
 
-        String message = "\\\\Error notify//\n"+
-                         "Call time: " +
+        String message = "Call time: " +
                          messageArg.getCallTime() +
-                         '\n' +
-                         "Error method name: " +
-                         messageArg.getMethodName();
+                         "\nMethod name: " +
+                         messageArg.getMethodName()+
+                         "\nMethod name: " +
+                         messageArg.getDescription()+
+                         "\nSuccessful: ";
+
+        if (messageArg.getExceptionName().isEmpty()) {
+            message += "Yes";
+        } else {
+            message += "No\n"+
+                       "Cause:"+
+                       messageArg.getExceptionName();
+        }
         sendMessageToBot(message);
     }
 
@@ -56,11 +71,10 @@ public class TelegramBotNotification implements Notification {
                                                 .scheme("https")
                                                 .host("api.telegram.org")
                                                 .path("/bot{token}/sendMessage")
-                                                .queryParam("chat_id", chatId)
+                                                .queryParam("chat_id", TELEGRAM_BOT_CHAT_ID)
                                                 .queryParam("text", message)
-                                                .buildAndExpand(botToken);
+                                                .buildAndExpand(TELEGRAM_BOT_TOKEN);
 
-
-        client.post().uri(uri.toUri()).retrieve().bodyToMono(Void.class).block();
+        webClient.post().uri(uri.toUri()).retrieve().bodyToMono(Void.class).block();
     }
 }

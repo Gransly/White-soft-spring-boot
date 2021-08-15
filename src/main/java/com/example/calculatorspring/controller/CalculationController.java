@@ -1,6 +1,7 @@
 package com.example.calculatorspring.controller;
 
 import com.example.calculatorspring.action.CalculationAction;
+import com.example.calculatorspring.aspect.Notify;
 import com.example.calculatorspring.service.LogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,6 +20,7 @@ public class CalculationController {
     private final LogService logService;
 
 
+    @Notify(description = "Returns numbers Min, Max, Avg and Sum of numbers")
     @PostMapping("calculator/all")
     @Operation(summary = "Returns numbers Min, Max, Avg and Sum of numbers")
     public String getCalculationResult(

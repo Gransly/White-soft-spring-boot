@@ -29,8 +29,12 @@ class TelegramBotNotificationTest {
         LocalDateTime dateTime = LocalDateTime.now();
 
         NotificationMessage messageArg = NotificationMessage.builder()
+
                                                             .callTime(dateTime)
                                                             .methodName("method")
+                                                            .methodName("Name")
+                                                            .description("Desc")
+                                                            .exceptionName("")
                                                             .build();
 
         doCallRealMethod().when(telegramBotNotification).sendNotification(any(NotificationMessage.class));
@@ -39,11 +43,14 @@ class TelegramBotNotificationTest {
         telegramBotNotification.sendNotification(messageArg);
 
         //Assert
-        String expectedMessage = "\\\\Error notify//\n"+"Call time: " +
+
+        String expectedMessage = "Call time: " +
                          messageArg.getCallTime() +
-                         '\n' +
-                         "Error method name: " +
-                         messageArg.getMethodName();
+                         "\nMethod name: " +
+                         messageArg.getMethodName()+
+                         "\nMethod name: " +
+                         messageArg.getDescription()+
+                         "\nSuccessful: Yes";
 
 
         verify(telegramBotNotification, times(1))

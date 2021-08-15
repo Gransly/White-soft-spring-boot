@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 public interface Notification {
 
     @Async
+
     void sendNotification(NotificationMessage messageArg);
 
     @Async

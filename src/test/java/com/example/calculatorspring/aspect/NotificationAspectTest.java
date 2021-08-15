@@ -9,14 +9,13 @@ import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Answers;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SoftAssertionsExtension.class)
@@ -47,7 +46,7 @@ class NotificationAspectTest {
         aspect.notifyAboutRequest(joinPoint, notify);
 
         //Assert
-        verify(telegramBotNotification, times(1)).sendNotification(messageCaptor.capture());
+        verify(telegramBotNotification).sendNotification(messageCaptor.capture());
 
         NotificationMessage actualMessage = messageCaptor.getValue();
 
@@ -68,8 +67,7 @@ class NotificationAspectTest {
 
         //Act & assert
         assertThrows(InputForbiddenException .class, () -> aspect.notifyAboutRequest(joinPoint, notify));
-        verify(telegramBotNotification, times(1))
-                .sendNotification(messageCaptor.capture());
+        verify(telegramBotNotification).sendNotification(messageCaptor.capture());
 
         NotificationMessage actualMessage = messageCaptor.getValue();
 
@@ -77,4 +75,5 @@ class NotificationAspectTest {
         softly.assertThat(actualMessage.getMethodName()).isEqualTo("Name");
         softly.assertThat(actualMessage.getExceptionName()).isEqualTo("Error, input should contain number>0");
     }
+
 }

@@ -1,8 +1,10 @@
 package com.example.calculatorspring.aspect;
 
-import com.example.calculatorspring.service.notification.NotificationMessage;
+import com.example.calculatorspring.entity.NotificationMessage;
+import com.example.calculatorspring.service.notification.Notification;
 import com.example.calculatorspring.service.notification.TelegramBotNotification;
 import com.jupiter.tools.spring.test.postgres.annotation.meta.EnablePostgresIntegrationTest;
+import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,8 +15,6 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
-
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
@@ -35,113 +35,33 @@ class NotificationAspectIT {
     ArgumentCaptor<NotificationMessage> messageCaptor;
 
     @Test
-    void testSendRequestDevilError() {
+    void testSendRequestInputForbiddenError(SoftAssertions softAssertions) {
         //Act
-        String actual = webTestClient
+        String actualResponse =webTestClient
                 .post()
                 .uri(uriBuilder -> uriBuilder
                         .path("/calculator/all/")
-                        .queryParam("inputString", "666")
+                        .queryParam("inputString", "123")
                         .build())
                 .exchange()
 
                 //Assert
-                .expectStatus().isBadRequest()
-                .expectBody(String.class)
-                .returnResult().getResponseBody();
+                .expectStatus().isOk()
+                .expectBody(String.class).returnResult()
+                .getResponseBody();
 
-        String expected = "{\"message\":\"Devil is above, input contain 666\"}";
+        String expectedResponse="1.0, 3.0, 6.0, 2.0";
 
-        assertEquals(expected, actual);
+        assertEquals(expectedResponse, actualResponse);
+
         verify(telegramBotNotification, times(1))
                 .sendNotification(messageCaptor.capture());
 
-        NotificationMessage actualMessage = messageCaptor.getValue();
 
-        assertEquals(actualMessage.getMethodName(),"handleDevilNumberException");
-    }
-
-    @Test
-    void testSendRequestInputForbiddenError() {
-        //Act
-        String actual = webTestClient
-                .post()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/calculator/all/")
-                        .queryParam("inputString", "asdasd")
-                        .build())
-                .exchange()
-
-                //Assert
-                .expectStatus().isBadRequest()
-                .expectBody(String.class)
-                .returnResult().getResponseBody();
-
-        String expected = "{\"message\":\"Error, input should contain number>0\"}";
-
-        assertEquals(expected, actual);
-        verify(telegramBotNotification, times(1))
-                .sendNotification(messageCaptor.capture());
 
         NotificationMessage actualMessage = messageCaptor.getValue();
+        softAssertions.assertThat(actualMessage.getDescription()).isEqualTo("Returns numbers Min, Max, Avg and Sum of numbers");
+        softAssertions.assertThat(actualMessage.getMethodName()).isEqualTo("getCalculationResult");
 
-        assertEquals(actualMessage.getMethodName(),"handleInputForbiddenException");
-    }
-
-    @Test
-    void testSendRequestLongNumberError() {
-
-        //Arrange
-        String number = String.join("", Collections.nCopies(100, "2"));
-        //Act
-        String actual = webTestClient
-                .post()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/calculator/all/")
-                        .queryParam("inputString", number)
-                        .build())
-                .exchange()
-
-                //Assert
-                .expectStatus().isBadRequest()
-                .expectBody(String.class)
-                .returnResult().getResponseBody();
-
-        String expected = "{\"message\":\"Input number contains more then 100 digits\"}";
-
-        assertEquals(expected, actual);
-        verify(telegramBotNotification, times(1))
-                .sendNotification(messageCaptor.capture());
-
-        NotificationMessage actualMessage = messageCaptor.getValue();
-
-        assertEquals(actualMessage.getMethodName(),"handleLongNumberException");
-    }
-
-    @Test
-    void testSendRequestMasterNumberError() {
-        //Act
-        String actual = webTestClient
-                .post()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/calculator/all/")
-                        .queryParam("inputString", "99996")
-                        .build())
-                .exchange()
-
-                //Assert
-                .expectStatus().isBadRequest()
-                .expectBody(String.class)
-                .returnResult().getResponseBody();
-
-        String expected = "{\"message\":\"42 sum is here!\"}";
-
-        assertEquals(expected, actual);
-        verify(telegramBotNotification, times(1))
-                .sendNotification(messageCaptor.capture());
-
-        NotificationMessage actualMessage = messageCaptor.getValue();
-
-        assertEquals(actualMessage.getMethodName(),"handleMasterNumberException");
     }
 }

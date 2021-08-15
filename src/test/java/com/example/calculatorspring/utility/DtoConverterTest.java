@@ -24,7 +24,7 @@ class DtoConverterTest {
         entity.setCreationDate(dateTime);
 
         //Act
-        MathExpressionsDto dto = DtoConverter.convertToDto(entity);
+        MathExpressionsDto dto = DtoConverter.convertToMathExpressionDto(entity);
 
         //Assert
         assertEquals(entity.getId(), dto.getId());
@@ -46,7 +46,7 @@ class DtoConverterTest {
         dto.setCreationDate(dateTime);
 
         //Act
-        MathExpressions entity = DtoConverter.convertToEntity(dto);
+        MathExpressions entity = DtoConverter.convertToMathExpressionEntity(dto);
 
         //Assert
         assertEquals(entity.getId(), dto.getId());

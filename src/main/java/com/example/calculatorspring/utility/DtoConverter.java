@@ -8,12 +8,12 @@ import org.modelmapper.ModelMapper;
 @UtilityClass
 public class DtoConverter {
 
-    public static MathExpressionsDto convertToDto(MathExpressions expression) {
+    public static MathExpressionsDto convertToMathExpressionDto(MathExpressions expression) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(expression, MathExpressionsDto.class);
     }
 
-    public static MathExpressions convertToEntity(MathExpressionsDto expressionsDto) {
+    public static MathExpressions convertToMathExpressionEntity(MathExpressionsDto expressionsDto) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(expressionsDto, MathExpressions.class);
     }

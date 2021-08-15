@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,40 +35,14 @@ public class LogController {
                     .collect(Collectors.toList());
     }
 
-    @Notify
+    @Notify(description = "Returns all log math expressions filtered by input, result and date")
     @GetMapping("log/search")
+    @Operation(summary = "Returns all log math expressions filtered by input, result and date")
     public List<MathExpressionsDto> getLogBySearch( SearchStats stats){
-
         List<MathExpressions> expressions = logService.searchLogs(stats);
-
-
         return expressions.stream()
                           .map(DtoConverter::convertToMathExpressionDto)
                           .collect(Collectors.toList());
     }
-
-    @Notify(description = "Returns all log math expressions sorted by date")
-    @GetMapping("log/byAfterDate")
-    @Operation(summary = "Returns all log math expressions sorted by date")
-    public List<MathExpressions> getLogByAfterDateExcluding(@RequestParam("date") LocalDateTime date) {
-        return logService.exportLogExpressionByAfterDate(date);
-    }
-
-    @Notify(description ="Returns all log math expressions sorted by date")
-    @GetMapping("log/byBeforeDate")
-    @Operation(summary = "Returns all log math expressions sorted by date")
-    public List<MathExpressions> getLogByBeforeDateExcluding(@RequestParam("date") LocalDateTime date) {
-        return logService.exportLogExpressionByBeforeDate(date);
-    }
-
-    @Notify(description = "Returns all log math expressions sorted by date")
-    @GetMapping("log/byBetweenDate")
-    @Operation(summary = "Returns all log math expressions sorted by date")
-    public List<MathExpressions> getLogByBetweenDateExcluding(@RequestParam("beforeDate")
-                                                               LocalDateTime beforeDate,
-                                                              @RequestParam("afterDate") LocalDateTime afterDate) {
-        return logService.exportLogExpressionByBetweenDate(beforeDate, afterDate);
-    }
-
 
 }

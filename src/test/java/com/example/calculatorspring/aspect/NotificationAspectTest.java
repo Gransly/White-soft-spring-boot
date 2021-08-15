@@ -2,7 +2,7 @@ package com.example.calculatorspring.aspect;
 
 import com.example.calculatorspring.check.exception.InputForbiddenException;
 import com.example.calculatorspring.entity.NotificationMessage;
-import com.example.calculatorspring.service.notification.TelegramBotNotification;
+import com.example.calculatorspring.notifier.TelegramNotifier;
 import com.google.common.collect.Lists;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.assertj.core.api.SoftAssertions;
@@ -17,12 +17,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
-@ExtendWith(MockitoExtension.class)
-@ExtendWith(SoftAssertionsExtension.class)
+@ExtendWith({MockitoExtension.class, SoftAssertionsExtension.class})
 class NotificationAspectTest {
 
     @Mock
-    private TelegramBotNotification telegramBotNotification;
+    private TelegramNotifier telegramBotNotification;
 
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private ProceedingJoinPoint joinPoint;

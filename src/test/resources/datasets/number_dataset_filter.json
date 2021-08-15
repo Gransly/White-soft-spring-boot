@@ -1,0 +1,16 @@
+{
+  "math_expressions": [
+    {
+      "id": "75e5f3bb-e8ce-482c-836b-198dc7c7c177",
+      "number": 1,
+      "result": "1",
+      "creation_date": "2021-08-14 17:58:29"
+    },
+    {
+      "id": "75e5f3bb-e8ce-482c-836b-198dc7c7c178",
+      "number": 2,
+      "result": "2",
+      "creation_date": "2021-08-14 20:58:29"
+    }
+  ]
+}
